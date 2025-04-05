@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "79731606070",
+    "project_id": "smarthome-5594b",
+    "storage_bucket": "smarthome-5594b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79731606070:android:a2047fbdb72a40add60e97",
+        "android_client_info": {
+          "package_name": "com.example.fixed_device"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGX3ImiQLFFyKIrgBPoV4h9YTZ9c_2bk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79731606070:android:5e867c28aaa7ebddd60e97",
+        "android_client_info": {
+          "package_name": "ptit.iot.smarthome"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGX3ImiQLFFyKIrgBPoV4h9YTZ9c_2bk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

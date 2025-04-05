@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fail">Thất bại</string>
+    <string name="mic_on">Nói</string>
+    <string name="history">Lịch sử</string>
+    <string name="light_sensor">Cảm biến ánh sáng</string>
+    <string name="lux">Ánh sáng</string>
+    <string name="auto_mode">Chế độ tự động</string>
+    <string name="dynamic">Giao diện động</string>
+    <string name="green">Xanh lục</string>
+    <string name="rgb">RGB</string>
+</resources>

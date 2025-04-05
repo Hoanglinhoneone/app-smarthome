@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">SmartHome</string>
+    <string name="app_name_real">SmartHome</string>
+    <string name="home">Trang chủ</string>
+    <string name="stats">Thống kê</string>
+    <string name="setting">Cài đặt</string>
+    <string name="yellow">Vàng</string>
+    <string name="red">Đỏ</string>
+    <string name="blue">Xanh</string>
+    <string name="off">Đang tắt</string>
+    <string name="on">Đang bật</string>
+    <string name="light_on_action">Bật đèn</string>
+    <string name="light_off_action">Tắt đèn</string>
+    <string name="auto_on_action">Bật chế độ tự động</string>
+    <string name="auto_off_action">Tắt chế độ tự động</string>
+    <string name="success">Thành công</string>
+    <string name="fail">Thất bại</string>
+    <string name="mic_on"></string>
+    <string name="mic_off">Hãy nói</string>
+    <string name="history">Lịch sử</string>
+    <string name="time">Thời gian</string>
+    <string name="location">Vị trí</string>
+    <string name="light_sensor">Cảm biến ánh sáng</string>
+    <string name="lux">Ánh sáng</string>
+    <string name="auto_mode">Chế độ tự động</string>
+    <string name="dynamic">Giao diện động</string>
+    <string name="green">Xanh lục</string>
+    <string name="rgb">RGB</string>
+</resources>
