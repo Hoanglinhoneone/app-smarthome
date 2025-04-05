@@ -10,7 +10,7 @@ Dự án **Smart Home** cho phép người dùng điều khiển hệ thống đ
   - Room Database
   - Firebase
 - **Reactive Programming**: Kotlin, Flow, StateFlow, Coroutine
-
+- **Navigation**: Navigation Drawer
 - **UI**: Jetpack Compose, Material Design 3
 - **Speech to Text**: Giọng nói để điều khiển đèn
 - **Custom View**: Canvas (để tạo giao diện biểu đồ thống kê tùy chỉnh)
