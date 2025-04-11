@@ -9,4 +9,5 @@ interface LightRepository {
     fun getLights(): Flow<List<LightEntity>>
     suspend fun insertLight(light: LightEntity)
     suspend fun deleteAllLights()
+    suspend fun getLightsInDay(): List<LightEntity>
 }

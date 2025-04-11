@@ -26,36 +26,6 @@ fun StatsScreen(
     viewModel: StatsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val data: MutableList<Pair<Int, Double>> = mutableListOf(
-        Pair(6, 111.45),
-        Pair(7, 111.0),
-        Pair(8, 113.45),
-        Pair(9, 112.25),
-        Pair(9, 112.25),
-        Pair(9, 112.25),
-        Pair(10, 116.45),
-        Pair(11, 113.35),
-        Pair(12, 118.65),
-        Pair(12, 118.65),
-        Pair(13, 110.15),
-        Pair(14, 113.05),
-        Pair(15, 114.25),
-        Pair(15, 114.25),
-        Pair(16, 116.35),
-        Pair(16, 116.35),
-        Pair(17, 117.45),
-        Pair(17, 117.45),
-        Pair(18, 112.65),
-        Pair(18, 112.65),
-        Pair(18, 112.65),
-        Pair(18, 112.65),
-        Pair(18, 112.65),
-        Pair(18, 112.65),
-        Pair(18, 112.65),
-        Pair(18, 112.65),
-        Pair(19, 115.45),
-        Pair(20, 111.85)
-    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,7 +33,7 @@ fun StatsScreen(
         verticalArrangement = Arrangement.Center
     ) {
         LineChart(
-            data = uiState.dataLightsDay,
+            data = uiState.data,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)

@@ -33,29 +33,36 @@ class StatsViewModel @Inject constructor(
      * Init
      ***********************************************************************/
     init {
+
         viewModelScope.launch {
-            lightRepository.getLightsStats().collect { lightStats ->
-                val listLightReverse = lightStats.reversed()
-                Log.d(TAG, "lightStats: $lightStats")
-                _uiState.value = _uiState.value.copy(lights = lightStats)
-                val dataFake: MutableList<Pair<Int, Double>> =
-                    emptyList<Pair<Int, Double>>().toMutableList()
-                for (i in 1..listLightReverse.size) {
-                    dataFake.add(Pair(i, listLightReverse[i - 1].light.toDouble()))
+            launch {
+                lightRepository.getLightsStats().collect { lightStats ->
+                    val listLightReverse = lightStats.reversed()
+                    Log.d(TAG, "lightStats: $lightStats")
+                    _uiState.value = _uiState.value.copy(lights = lightStats)
+                    val dataFake: MutableList<Pair<Int, Double>> =
+                        emptyList<Pair<Int, Double>>().toMutableList()
+                    for (i in 1..listLightReverse.size) {
+                        dataFake.add(Pair(i, listLightReverse[i - 1].light.toDouble()))
+                    }
+                    _uiState.value = _uiState.value.copy(data = dataFake)
                 }
-                _uiState.value = _uiState.value.copy(data = dataFake)
             }
-            lightRepository.getDayLightsStats().collect { lights ->
-                val listLightReverse = lights.reversed()
-                Log.d(TAG, "lightStats: $lights")
-                val dataFake: MutableList<Pair<Int, Double>> =
-                    emptyList<Pair<Int, Double>>().toMutableList()
-                for (i in 1..listLightReverse.size) {
-                    dataFake.add(Pair(i, listLightReverse[i - 1].light.toDouble()))
-                }
-                _uiState.value = _uiState.value.copy(dataLightsDay = dataFake)
+            launch {
+                getLightsInDay()
             }
+
         }
+    }
+    suspend fun getLightsInDay() {
+        val listLight = lightRepository.getLightsInDay()
+        Log.d(TAG, "lightStats: $listLight")
+        val dataFake: MutableList<Pair<Int, Double>> =
+            emptyList<Pair<Int, Double>>().toMutableList()
+        for (i in 1..listLight.size) {
+            dataFake.add(Pair(i, listLight[i - 1].light.toDouble()))
+        }
+        _uiState.value = _uiState.value.copy(dataLightsDay = dataFake)
     }
 }
 

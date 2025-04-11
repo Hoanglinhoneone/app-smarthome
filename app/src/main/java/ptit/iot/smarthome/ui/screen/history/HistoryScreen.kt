@@ -89,7 +89,7 @@ fun HistoryScreen(
                     modifier = Modifier.padding(top = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(uiState.lights) { light ->
+                    items(uiState.lights.reversed()) { light ->
                         LightItem(light = light)
                     }
                 }

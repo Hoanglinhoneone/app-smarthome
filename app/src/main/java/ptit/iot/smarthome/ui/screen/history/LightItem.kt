@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ptit.iot.smarthome.R
 import ptit.iot.smarthome.data.entity.LightEntity
+import ptit.iot.smarthome.utils.helper.convertToDateTime
 
 @Composable
 fun LightItem(
@@ -74,7 +75,7 @@ fun LightItem(
                         )
                     }
                     Text(
-                        text = light.time,
+                        text = light.timestamp.convertToDateTime(),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -105,7 +106,7 @@ fun LightItemPreview(modifier: Modifier = Modifier) {
     MaterialTheme {
         LightItem(
             light = LightEntity(
-                time = "29/03/2025 15:20:11",
+                timestamp = 0,
                 light = 1000f
             )
         )

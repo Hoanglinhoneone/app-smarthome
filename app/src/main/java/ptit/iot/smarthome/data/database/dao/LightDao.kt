@@ -10,8 +10,6 @@ import ptit.iot.smarthome.data.entity.LightEntity
 
 @Dao
 interface LightDao {
-
-
     @Query("SELECT * FROM lights ORDER BY id DESC LIMIT 20")
     fun getLightsStats(): Flow<List<LightEntity>>
 
@@ -23,4 +21,8 @@ interface LightDao {
 
     @Query("DELETE FROM lights")
     suspend fun deleteAllLight()
+
+    @Query("SELECT * FROM lights WHERE timestamp >= :startOfDay AND timestamp <= :endOfDay ORDER BY timestamp DESC LIMIT 30")
+    suspend fun getLightsInDay(startOfDay: Long, endOfDay: Long): List<LightEntity>
+
 }

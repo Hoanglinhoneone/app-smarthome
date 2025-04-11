@@ -20,15 +20,33 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import ptit.iot.smarthome.R
 import ptit.iot.smarthome.utils.Action
 import ptit.iot.smarthome.data.entity.ActionEntity
+import ptit.iot.smarthome.utils.ActionState
+import ptit.iot.smarthome.utils.helper.convertToDateTime
 
 @Composable
 fun ActionItem(
     action: ActionEntity,
     modifier: Modifier = Modifier
 ) {
+    val iconState = when(action.state) {
+        ActionState.SUCCESS.name -> R.drawable.ic_state_success
+        else -> R.drawable.ic_state_fail
+    }
+    val textTitle = when(action.action) {
+        Action.AUTO_ON.name -> R.string.auto_on_action
+        Action.AUTO_OFF.name -> R.string.auto_off_action
+        Action.LIGHT_ON.name -> R.string.light_on_action
+        Action.LIGHT_OFF.name -> R.string.light_off_action
+        Action.CHANGE_COLOR_BLUE.name -> R.string.change_color_blue_action
+        Action.CHANGE_COLOR_RED.name -> R.string.change_color_red_action
+        Action.CHANGE_COLOR_GREEN.name -> R.string.change_color_green_action
+        Action.CHANGE_COLOR_YELLOW.name -> R.string.change_color_yellow_action
+        else -> { R.string.unknown_action }
+    }
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -41,7 +59,8 @@ fun ActionItem(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.item_auto),
-                contentDescription = stringResource(R.string.light_sensor)
+                contentDescription = stringResource(R.string.light_sensor),
+                modifier = Modifier.size(40.dp)
             )
             Column(
                 modifier = Modifier.padding(start = 8.dp),
@@ -49,8 +68,9 @@ fun ActionItem(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "Bật chế độ tự động",
+                    text = stringResource(textTitle),
                     style = MaterialTheme.typography.titleLarge,
+                    fontSize = 18.sp
                 )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -61,7 +81,8 @@ fun ActionItem(
                     )
                     Text(
                         "Bật đèn",
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = 12.sp
                     )
                 }
                 Row(
@@ -77,8 +98,9 @@ fun ActionItem(
                         )
                     }
                     Text(
-                        text = "29/03/2025 15:20:11",
-                        style = MaterialTheme.typography.bodyMedium
+                        text = action.timestamp.convertToDateTime(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontSize = 12.sp
                     )
                 }
             }
@@ -90,11 +112,12 @@ fun ActionItem(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_state_fail),
+                        painter = painterResource(iconState) ,
                         contentDescription = stringResource(R.string.location),
                     )
                     Text(
-                        text = action.state
+                        text = action.state,
+                        fontSize = 14.sp
                     )
                 }
             }
@@ -108,7 +131,7 @@ fun ActionItemPreview(modifier: Modifier = Modifier) {
     MaterialTheme {
         ActionItem(
             action = ActionEntity(
-                time = "29/03/2025 15:20:11",
+                timestamp = 0,
                 action = Action.AUTO_ON.name,
                 state = "Success"
             )

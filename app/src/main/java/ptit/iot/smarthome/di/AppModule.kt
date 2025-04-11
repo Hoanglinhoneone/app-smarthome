@@ -2,6 +2,8 @@ package ptit.iot.smarthome.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
@@ -9,6 +11,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ptit.iot.smarthome.data.database.AppDatabase
+import ptit.iot.smarthome.data.database.MIGRATION_1_2
 import ptit.iot.smarthome.data.database.dao.ActionDao
 import ptit.iot.smarthome.data.database.dao.LightDao
 import ptit.iot.smarthome.data.repository.ActionRepository
@@ -21,6 +24,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
 
     @Singleton
     @Provides
@@ -36,7 +40,8 @@ object AppModule {
         app,
         AppDatabase::class.java,
         "smarthome"
-    ).build()
+    ).addMigrations(MIGRATION_1_2).build()
+
 
     @Provides
     @Singleton

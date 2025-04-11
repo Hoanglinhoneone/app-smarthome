@@ -26,4 +26,9 @@
     <string name="dynamic">Giao diện động</string>
     <string name="green">Xanh lục</string>
     <string name="rgb">RGB</string>
+    <string name="unknown_action">Không xác định</string>
+    <string name="change_color_yellow_action">Đổi màu đèn sang vàng</string>
+    <string name="change_color_red_action">Đổi màu đèn sang đỏ</string>
+    <string name="change_color_green_action">Đổi màu đèn sang xanh lá</string>
+    <string name="change_color_blue_action">Đổi màu đèn sang xanh lục</string>
 </resources>

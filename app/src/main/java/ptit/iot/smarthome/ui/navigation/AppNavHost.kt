@@ -57,7 +57,7 @@ fun AppNavHost(
             startDestination = Screen.Home.name,
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable(Screen.Home.name) { HomeScreen() }
+            composable(Screen.Home.name) { HomeScreen(viewModel) }
             composable(Screen.Stats.name) { StatsScreen() }
             composable(Screen.Setting.name) {
                 SettingsScreen(

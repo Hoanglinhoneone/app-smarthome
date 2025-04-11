@@ -63,9 +63,9 @@ fun ColorItem(
     val colorText = if (isDarkMode) Color.White else Color.Black
     val colorValue = when (color) {
         ColorLed.YELLOW -> Color.Yellow
-        ColorLed.RED -> androidx.compose.ui.graphics.Color.Red
-        ColorLed.BLUE -> androidx.compose.ui.graphics.Color.Blue
-        ColorLed.GREEN -> androidx.compose.ui.graphics.Color.Green
+        ColorLed.RED -> Color.Red
+        ColorLed.BLUE -> Color.Blue
+        ColorLed.GREEN -> Color.Green
     }
     Column(
         modifier = modifier
@@ -73,10 +73,8 @@ fun ColorItem(
     ) {
         Box(
             modifier = modifier
+                .size(32.dp)
                 .clip(CircleShape)
-                .size(30.dp)
-                .background(color = colorValue)
-                .shadow(10.dp, CircleShape)
                 .align(Alignment.CenterHorizontally)
                 .clickable {
                     onClickItem()
@@ -92,7 +90,16 @@ fun ColorItem(
                         Modifier
                     }
                 )
-        )
+
+        ) {
+            Box(
+                modifier = modifier
+                    .clip(CircleShape)
+                    .size(30.dp)
+                    .background(color = colorValue)
+                    .shadow(10.dp, CircleShape)
+            )
+        }
         Text(
             text = stringResource(color.title),
             color = if (isSelected) colorText else MaterialTheme.colorScheme.primary,

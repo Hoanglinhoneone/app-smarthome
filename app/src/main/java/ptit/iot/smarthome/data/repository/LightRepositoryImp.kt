@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import ptit.iot.smarthome.data.database.dao.LightDao
 import ptit.iot.smarthome.data.entity.LightEntity
+import ptit.iot.smarthome.utils.helper.convertToEndOfDay
+import ptit.iot.smarthome.utils.helper.convertToStartOfDay
 import ptit.iot.smarthome.utils.helper.getCurrentDate
+import ptit.iot.smarthome.utils.helper.getTimeStamp
 import javax.inject.Inject
 
 class LightRepositoryImp @Inject constructor(private val lightDao: LightDao) : LightRepository {
@@ -14,12 +17,7 @@ class LightRepositoryImp @Inject constructor(private val lightDao: LightDao) : L
     override fun getLightsStats(): Flow<List<LightEntity>> = lightDao.getLightsStats()
 
     override fun getDayLightsStats(): Flow<List<LightEntity>> {
-        return lightDao.getLights().map { allLights ->
-            allLights.filter { light ->
-                val lightDate = light.time.split(" ")[0]
-                lightDate == getCurrentDate()
-            }
-        }
+        return lightDao.getLights()
     }
 
     override fun getLights(): Flow<List<LightEntity>> {
@@ -33,4 +31,11 @@ class LightRepositoryImp @Inject constructor(private val lightDao: LightDao) : L
     }
 
     override suspend fun deleteAllLights() = lightDao.deleteAllLight()
+
+    override suspend fun getLightsInDay(): List<LightEntity> {
+        val timestamp = getTimeStamp()
+        val startOfDay = timestamp.convertToStartOfDay()
+        val endOfDay = timestamp.convertToEndOfDay()
+        return lightDao.getLightsInDay(startOfDay, endOfDay)
+    }
 }

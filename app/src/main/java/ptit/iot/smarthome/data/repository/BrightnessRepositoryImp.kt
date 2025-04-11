@@ -16,7 +16,7 @@ class BrightnessRepositoryImp @Inject constructor(
     }
 
     override fun setMinLux(value: Float) {
-         appPreferences.setMinLux(value)
+        appPreferences.setMinLux(value)
     }
 
     override fun setMaxLux(value: Float) {

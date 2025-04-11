@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import ptit.iot.smarthome.ui.component.AppNavigationDrawer

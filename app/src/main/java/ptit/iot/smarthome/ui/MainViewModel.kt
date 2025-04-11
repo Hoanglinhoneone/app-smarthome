@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.channels.ticker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ptit.iot.smarthome.data.entity.LightEntity
@@ -17,6 +20,7 @@ import ptit.iot.smarthome.data.repository.BrightnessRepository
 import ptit.iot.smarthome.data.repository.LightRepository
 import ptit.iot.smarthome.data.repository.ThemeRepository
 import ptit.iot.smarthome.utils.helper.getCurrentDateTime
+import ptit.iot.smarthome.utils.helper.getTimeStamp
 import ptit.iot.smarthome.utils.helper.handleVoice
 import ptit.iot.smarthome.utils.helper.stt.SpeechEngineListener
 import ptit.iot.smarthome.utils.helper.stt.SpeechToTextManager
@@ -34,7 +38,8 @@ class MainViewModel @Inject constructor(
     /* **********************************************************************
      * Variable
      ***********************************************************************/
-    private val TAG = "Linh_HN"
+    private val TAG = "MainViewModel"
+    private var tickerJob: Job? = null
 
     private val _uiSate = MutableStateFlow(UiSate())
     val uiState: StateFlow<UiSate> = _uiSate.asStateFlow()
@@ -46,6 +51,7 @@ class MainViewModel @Inject constructor(
      * Init
      ***********************************************************************/
     init {
+        Log.i(TAG, "Init MainViewModel")
         getDynamicTheme()
         startReadData()
         getStateLight()
@@ -73,9 +79,9 @@ class MainViewModel @Inject constructor(
 
             override fun onResults(results: String) {
                 _uiSate.update { it.copy(isListening = false) }
-                if(results.isNotEmpty()) {
+                if (results.isNotEmpty()) {
                     Log.d(TAG, "results: $results")
-                    val actionValue   = handleVoice(results)
+                    val actionValue = handleVoice(results)
                     when (actionValue.lowercase()) {
                         "bật" -> if (!uiState.value.isLightOn) updateLight(true)
                         "tắt" -> if (uiState.value.isLightOn) updateLight(false)
@@ -92,6 +98,7 @@ class MainViewModel @Inject constructor(
 
         })
     }
+
     private fun getStateLight() {
         viewModelScope.launch {
             database.getReference("control").child("led").get()
@@ -113,17 +120,27 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    @OptIn(ObsoleteCoroutinesApi::class)
     private fun startReadData() {
-        viewModelScope.launch {
-            while (true) {
+        Log.i(TAG, "startReadData")
+        stopReadData()
+        Log.d(TAG, "tickerJob : $tickerJob")
+        tickerJob = viewModelScope.launch {
+            ticker(delayMillis = 3000).consumeAsFlow().collect {
+                Log.i(TAG, "startReadData: ")
                 readData()
-                delay(5000)
             }
         }
     }
 
+    private fun stopReadData() {
+        tickerJob?.cancel()
+        tickerJob = null
+    }
+
     @SuppressLint("NewApi")
     private fun readData() {
+        Log.i(TAG, "readData:")
         _uiSate.update { it.copy(isLoading = true) }
         database.getReference("sensorData").child("light").get()
             .addOnSuccessListener {
@@ -138,7 +155,7 @@ class MainViewModel @Inject constructor(
                         Log.d(TAG, "insert light: ${it.value}")
                         lightRepository.insertLight(
                             LightEntity(
-                                time = getCurrentDateTime(),
+                                timestamp = getTimeStamp(),
                                 light = it.value.toString().toFloat()
                             )
                         )
@@ -179,16 +196,6 @@ class MainViewModel @Inject constructor(
                 _uiSate.update { uiState ->
                     uiState.copy(isLoading = false)
                 }
-//                viewModelScope.launch {
-//                    historyRepository.insertHistory(
-//                        HistoryEntity(
-//                            0,
-//                            "",
-//                            if (stateLight) HistoryAction.LIGHT_ON.name else HistoryAction.LIGHT_OFF.name,
-//                            ActionState.SUCCESS.name
-//                        )
-//                    )
-//                }
                 Log.d(TAG, "update light: success")
             }
             .addOnFailureListener {
@@ -200,14 +207,6 @@ class MainViewModel @Inject constructor(
                         error = it.message.toString()
                     )
                 }
-//                historyRepository.insertHistory(
-//                    HistoryEntity(
-//                        0,
-//                        "",
-//                        if (stateLight) HistoryAction.LIGHT_ON.name else HistoryAction.LIGHT_OFF.name,
-//                        ActionState.FAIL.name
-//                    )
-//                )
             }
     }
 

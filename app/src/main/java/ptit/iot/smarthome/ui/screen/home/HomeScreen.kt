@@ -53,9 +53,9 @@ import timber.log.Timber
 
 @Composable
 fun HomeScreen(
+    viewModel: MainViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    val viewModel: MainViewModel = hiltViewModel()
     val homeViewModel: HomeViewModel = hiltViewModel()
     val uiStateHome by homeViewModel.uiState.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
@@ -220,7 +220,6 @@ fun HomeScreen(
                             color = MaterialTheme.colorScheme.onSurface,
                             shape = RoundedCornerShape(16.dp)
                         ),
-//                horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     ColorList(
                         onCLickItem = {

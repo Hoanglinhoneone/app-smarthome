@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "lights")
 data class LightEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "time") val time: String,
+    @ColumnInfo(name = "timestamp") val timestamp: Long,
     @ColumnInfo(name = "light") val light: Float,
 )
