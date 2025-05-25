@@ -40,6 +40,7 @@ import ptit.iot.smarthome.R
 
 @Composable
 fun SettingsScreen(
+    onClickLogout: () -> Unit,
     modifier: Modifier = Modifier,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
@@ -223,44 +224,47 @@ fun SettingsScreen(
                 },
             )
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(sizeIcon)
-                    .background(
-                        color = backgroundIcon,
-                        shape = CircleShape
-                    )
-                    .padding(8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_logout),
-                    contentDescription = null,
-                    tint = tintIcon,
-                )
+//        Row(
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Box(
+//                modifier = Modifier
+//                    .size(sizeIcon)
+//                    .background(
+//                        color = backgroundIcon,
+//                        shape = CircleShape
+//                    )
+//                    .padding(8.dp),
+//                contentAlignment = Alignment.Center
+//            ) {
+//                Icon(
+//                    painter = painterResource(R.drawable.ic_logout),
+//                    contentDescription = null,
+//                    tint = tintIcon,
+//                )
+//            }
+//            Text(
+//                text = "Xóa dữ liệu",
+//                style = styleTitleText,
+//                modifier = Modifier.padding(start = 16.dp).weight(1f)
+//            )
+//            Button(
+//                onClick = {
+//                    viewModel.deleteLightData()
+//                    viewModel.deleteActionData()
+//                },
+//                modifier = Modifier
+//            ) {
+//                Text(
+//                    text = "Xóa"
+//                )
+//            }
+//        }
+        Row  (
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable {
+                onClickLogout()
             }
-            Text(
-                text = "Xóa dữ liệu",
-                style = styleTitleText,
-                modifier = Modifier.padding(start = 16.dp).weight(1f)
-            )
-            Button(
-                onClick = {
-                    viewModel.deleteLightData()
-                    viewModel.deleteActionData()
-                },
-                modifier = Modifier
-            ) {
-                Text(
-                    text = "Xóa"
-                )
-            }
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
@@ -292,6 +296,7 @@ fun SettingsScreen(
 fun SettingPreview(modifier: Modifier = Modifier) {
     SettingsScreen(
         checked = true,
-        onCheckedChange = {}
+        onCheckedChange = {},
+        onClickLogout = {}
     )
 }

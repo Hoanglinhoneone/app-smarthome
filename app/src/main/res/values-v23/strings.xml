@@ -10,8 +10,9 @@
     <string name="green">Xanh lục</string>
     <string name="rgb">RGB</string>
     <string name="unknown_action">Không xác định</string>
-    <string name="change_color_yellow_action">Đổi màu đèn sang vàng</string>
-    <string name="change_color_red_action">Đổi màu đèn sang đỏ</string>
-    <string name="change_color_green_action">Đổi màu đèn sang xanh lá</string>
-    <string name="change_color_blue_action">Đổi màu đèn sang xanh lục</string>
+    <string name="change_color_yellow_action">Bật đèn phòng ngủ</string>
+    <string name="change_color_red_action">Bật đèn phòng khách</string>
+    <string name="change_color_green_action">Bật đèn phòng ăn</string>
+    <string name="change_color_blue_action">Bật đèn phòng tắm</string>
+    <string name="login">Login</string>
 </resources>

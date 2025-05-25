@@ -17,14 +17,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.navigation
+import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ptit.iot.smarthome.ui.MainViewModel
+import ptit.iot.smarthome.ui.screen.auth.LoginSignupScreen
 import ptit.iot.smarthome.ui.screen.history.HistoryScreen
-import ptit.iot.smarthome.ui.screen.home.HomeScreen
+import ptit.iot.smarthome.ui.screen.home.HomeScreenTest
 import ptit.iot.smarthome.ui.screen.setting.SettingsScreen
 import ptit.iot.smarthome.ui.screen.stats.StatsScreen
 
@@ -42,29 +49,64 @@ fun AppNavHost(
     val isDynamic by viewModel.isDynamic.collectAsState()
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Nhà thông minh") },
-                navigationIcon = {
-                    IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                        Icon(Icons.Filled.Menu, contentDescription = "Menu")
+            if(getCurrentRoute(navController) != Screen.Login.route) {
+                TopAppBar(
+                    title = { Text("Đèn thông minh") },
+                    navigationIcon = {
+                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                            Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     ) { paddingValues ->
         NavHost(
             navController,
-            startDestination = Screen.Home.name,
+            startDestination = TypeGraph.Auth.route,
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable(Screen.Home.name) { HomeScreen(viewModel) }
-            composable(Screen.Stats.name) { StatsScreen() }
-            composable(Screen.Setting.name) {
-                SettingsScreen(
-                    checked = isDynamic,
-                    onCheckedChange = { viewModel.setDynamicTheme(it) }
-                ) }
-            composable(Screen.History.name) { HistoryScreen() }
+
+            navigation(
+                route = TypeGraph.Home.route,
+                startDestination = Screen.Home.route
+            ) {
+                composable(Screen.Home.route) { HomeScreenTest(viewModel) }
+                composable(Screen.Stats.route) { StatsScreen() }
+                composable(Screen.Setting.route) {
+                    SettingsScreen(
+                        onClickLogout = {
+                            navController.navigate(Screen.Login.name)
+                        },
+                        checked = isDynamic,
+                        onCheckedChange = { viewModel.setDynamicTheme(it) }
+                    ) }
+                composable(Screen.History.route) { HistoryScreen() }
+//            composable(
+//                Screen.Login.route,
+//                arguments = listOf(navArgument("data") { type = NavType.StringType })
+//            ) { backStackEntry ->
+//                val data = backStackEntry.arguments?.getString("data")
+//                LoginSignupScreen(data)
+//            }
+            }
+            navigation(
+                route = TypeGraph.Auth.route,
+                startDestination = Screen.Login.route
+            ) {
+                composable(
+                    route = Screen.Login.route,
+//                    arguments = listOf(navArgument("data") { type = NavType.StringType })
+                ) { backStackEntry ->
+//                    val data = backStackEntry.arguments?.getString("data")
+                    LoginSignupScreen(navController)
+                }
+            }
         }
     }
+}
+@Composable
+fun getCurrentRoute(navController: NavController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    return navBackStackEntry?.destination?.route
 }

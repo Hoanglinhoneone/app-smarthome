@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +48,7 @@ fun LightItem(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "Đèn ngủ",
+                    text = light.type,
                     style = MaterialTheme.typography.titleLarge,
                 )
                 Row(
@@ -58,7 +59,7 @@ fun LightItem(
                         contentDescription = stringResource(R.string.lux),
                     )
                     Text(
-                        "${light.light} Lux",
+                        "${light.light.toInt()} Lux",
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }
@@ -76,7 +77,8 @@ fun LightItem(
                     }
                     Text(
                         text = light.timestamp.convertToDateTime(),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White.copy(alpha = 0.5f)
                     )
                 }
             }

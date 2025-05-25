@@ -73,8 +73,6 @@ class HomeViewModel @Inject constructor(
             ColorLed.RED -> Action.CHANGE_COLOR_RED
             ColorLed.GREEN -> Action.CHANGE_COLOR_GREEN
             ColorLed.BLUE -> Action.CHANGE_COLOR_BLUE
-
-
         }
         Log.i(TAG, "updateColor: $colorLed")
         _uiSate.value = _uiSate.value.copy(loading = true, colorLed = colorLed)

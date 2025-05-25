@@ -1,6 +1,7 @@
 package ptit.iot.smarthome.ui.screen.auth
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -43,10 +46,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import ptit.iot.smarthome.R
 
 @Composable
-fun LoginSignupScreen() {
+fun LoginSignupScreen(
+    navController: NavController
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -61,7 +67,7 @@ fun LoginSignupScreen() {
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
-            text = "Welcome to SO",
+            text = "Welcome to Smart Light",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
@@ -139,7 +145,7 @@ fun LoginSignupScreen() {
 
         // Email Field
         OutlinedTextField(
-            value = email,
+            value = "",
             onValueChange = { email = it },
             placeholder = { Text("Email Address") },
             leadingIcon = {
@@ -202,17 +208,19 @@ fun LoginSignupScreen() {
 
         // Login Button
         Button(
-            onClick = { /* Handle login/signup */ },
+            onClick = { navController.navigate("Home") },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3)),
         ) {
             Text(
                 text = if (selectedTab == 0) "Login" else "Sign Up",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
+                ,
+                color = Color.White
             )
         }
 
@@ -233,7 +241,8 @@ fun LoginSignupScreen() {
             Text(
                 text = "Terms of Service",
                 fontSize = 12.sp,
-                color = Color.Black,
+                color = if(isSystemInDarkTheme()) Color.White else Color.Black
+                ,
                 fontWeight = FontWeight.Bold
             )
             Text(
@@ -244,7 +253,8 @@ fun LoginSignupScreen() {
             Text(
                 text = "Privacy Policy",
                 fontSize = 12.sp,
-                color = Color.Black,
+                color = if(isSystemInDarkTheme()) Color.White else Color.Black
+                ,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -298,7 +308,9 @@ fun SocialLoginButton(
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = text)
+            Text(text = text,
+                color = if(isSystemInDarkTheme()) Color.White else Color.Black
+                )
         }
     }
 }
@@ -307,6 +319,8 @@ fun SocialLoginButton(
 @Composable
 fun LoginSignupScreenPreview() {
     MaterialTheme {
-        LoginSignupScreen()
+        LoginSignupScreen(
+            navController = NavController(LocalContext.current)
+        )
     }
 }

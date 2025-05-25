@@ -1,6 +1,7 @@
 package ptit.iot.smarthome.ui.screen.history
 
 
+import android.provider.ContactsContract
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +32,7 @@ import ptit.iot.smarthome.R
 import ptit.iot.smarthome.utils.Action
 import ptit.iot.smarthome.data.entity.ActionEntity
 import ptit.iot.smarthome.utils.ActionState
+import ptit.iot.smarthome.utils.DataSource
 import ptit.iot.smarthome.utils.helper.convertToDateTime
 
 @Composable
@@ -60,7 +68,17 @@ fun ActionItem(
             Image(
                 painter = painterResource(id = R.drawable.item_auto),
                 contentDescription = stringResource(R.string.light_sensor),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(40.dp).graphicsLayer(alpha = 0.99f)
+                    .drawWithCache {
+                        onDrawWithContent {
+                            drawContent()
+                            drawRect(Brush.horizontalGradient(
+                    colors = listOf(
+                        Color(0xFFFFFFFF),
+                        Color(0xFFFFFFFF)
+                    )), blendMode = BlendMode.SrcAtop)
+                        }
+                    }
             )
             Column(
                 modifier = Modifier.padding(start = 8.dp),
@@ -80,7 +98,7 @@ fun ActionItem(
                         contentDescription = stringResource(R.string.lux),
                     )
                     Text(
-                        "Bật đèn",
+                        text = DataSource.typeAction[(0..1).random()],
                         style = MaterialTheme.typography.bodyLarge,
                         fontSize = 12.sp
                     )
@@ -100,7 +118,8 @@ fun ActionItem(
                     Text(
                         text = action.timestamp.convertToDateTime(),
                         style = MaterialTheme.typography.bodyMedium,
-                        fontSize = 12.sp
+                        fontSize = 12.sp,
+                        color = Color.White.copy(alpha = 0.5f)
                     )
                 }
             }
@@ -109,16 +128,18 @@ fun ActionItem(
                 contentAlignment = Alignment.CenterEnd
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.padding(end = 16 .dp)
                 ) {
                     Image(
                         painter = painterResource(iconState) ,
                         contentDescription = stringResource(R.string.location),
                     )
-                    Text(
-                        text = action.state,
-                        fontSize = 14.sp
-                    )
+//                    Text(
+//                        text = action.state,
+//                        fontSize = 12.sp,
+//
+//                    )
                 }
             }
         }

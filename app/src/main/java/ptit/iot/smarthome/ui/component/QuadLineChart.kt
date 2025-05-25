@@ -38,7 +38,7 @@ fun QuadLineChart(
 
     val textPaint = remember(density) {
         Paint().apply {
-            color = if(isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.BLACK
+            color = if(isDarkTheme) android.graphics.Color.WHITE else android.graphics.Color.TRANSPARENT
             textAlign = Paint.Align.CENTER
             textSize = density.run { 12.sp.toPx() }
         }

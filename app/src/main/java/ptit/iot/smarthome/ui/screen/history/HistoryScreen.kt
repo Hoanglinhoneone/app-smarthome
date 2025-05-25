@@ -86,7 +86,7 @@ fun HistoryScreen(
         when(lightPageSelected) {
             true -> {
                 LazyColumn(
-                    modifier = Modifier.padding(top = 8.dp),
+                    modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(uiState.lights.reversed()) { light ->
@@ -96,10 +96,10 @@ fun HistoryScreen(
             }
             false -> {
                 LazyColumn(
-                    modifier = Modifier.padding(top = 8.dp),
+                    modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(uiState.actions) { action ->
+                    items(uiState.actions.reversed()) { action ->
                         ActionItem(action = action)
                     }
                 }

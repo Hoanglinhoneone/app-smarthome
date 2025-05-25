@@ -9,7 +9,7 @@ import ptit.iot.smarthome.data.database.dao.LightDao
 import ptit.iot.smarthome.data.entity.ActionEntity
 import ptit.iot.smarthome.data.entity.LightEntity
 
-@Database(entities = [LightEntity::class, ActionEntity::class], version = 2, exportSchema = false)
+@Database(entities = [LightEntity::class, ActionEntity::class], version = 3, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun lightDao(): LightDao
     abstract fun historyDao(): ActionDao
@@ -42,5 +42,12 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
         """)
         database.execSQL("DROP TABLE actions")
         database.execSQL("ALTER TABLE actions_new RENAME TO actions")
+    }
+}
+
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        // Thêm cột type vào bảng lights
+        database.execSQL("ALTER TABLE lights ADD COLUMN type TEXT NOT NULL DEFAULT ''")
     }
 }

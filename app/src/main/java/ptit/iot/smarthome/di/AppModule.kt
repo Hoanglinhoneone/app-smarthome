@@ -12,6 +12,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ptit.iot.smarthome.data.database.AppDatabase
 import ptit.iot.smarthome.data.database.MIGRATION_1_2
+import ptit.iot.smarthome.data.database.MIGRATION_2_3
 import ptit.iot.smarthome.data.database.dao.ActionDao
 import ptit.iot.smarthome.data.database.dao.LightDao
 import ptit.iot.smarthome.data.repository.ActionRepository
@@ -40,7 +41,7 @@ object AppModule {
         app,
         AppDatabase::class.java,
         "smarthome"
-    ).addMigrations(MIGRATION_1_2).build()
+    ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build()
 
 
     @Provides

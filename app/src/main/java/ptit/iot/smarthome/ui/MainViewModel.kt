@@ -2,6 +2,7 @@ package ptit.iot.smarthome.ui
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.FirebaseDatabase
@@ -15,15 +16,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ptit.iot.smarthome.data.entity.ActionEntity
 import ptit.iot.smarthome.data.entity.LightEntity
+import ptit.iot.smarthome.data.repository.ActionRepository
 import ptit.iot.smarthome.data.repository.BrightnessRepository
 import ptit.iot.smarthome.data.repository.LightRepository
 import ptit.iot.smarthome.data.repository.ThemeRepository
+import ptit.iot.smarthome.utils.Action
+import ptit.iot.smarthome.utils.ActionState
 import ptit.iot.smarthome.utils.helper.getCurrentDateTime
 import ptit.iot.smarthome.utils.helper.getTimeStamp
 import ptit.iot.smarthome.utils.helper.handleVoice
 import ptit.iot.smarthome.utils.helper.stt.SpeechEngineListener
 import ptit.iot.smarthome.utils.helper.stt.SpeechToTextManager
+import ptit.iot.smarthome.utils.model.ColorLed
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,7 +38,8 @@ class MainViewModel @Inject constructor(
     private val speechToTextManager: SpeechToTextManager,
     private val brightnessRepository: BrightnessRepository,
     private val themeRepository: ThemeRepository,
-    private val lightRepository: LightRepository
+    private val lightRepository: LightRepository,
+    private val actionRepository: ActionRepository
 
 ) : ViewModel() {
     /* **********************************************************************
@@ -64,7 +71,8 @@ class MainViewModel @Inject constructor(
     fun startListening() {
         speechToTextManager.onStartListening(object : SpeechEngineListener {
             override fun onStartListening(isListening: Boolean) {
-                _uiSate.update { it.copy(isListening = true) }
+                Log.d(TAG, "onStartListening")
+                if(isListening) _uiSate.update { it.copy(isListening = true) }
             }
 
             override fun onBeginningOfSpeech() {
@@ -78,6 +86,7 @@ class MainViewModel @Inject constructor(
             }
 
             override fun onResults(results: String) {
+                Log.d(TAG, "onResults")
                 _uiSate.update { it.copy(isListening = false) }
                 if (results.isNotEmpty()) {
                     Log.d(TAG, "results: $results")
@@ -85,18 +94,31 @@ class MainViewModel @Inject constructor(
                     when (actionValue.lowercase()) {
                         "bật" -> if (!uiState.value.isLightOn) updateLight(true)
                         "tắt" -> if (uiState.value.isLightOn) updateLight(false)
+                        "ngủ" -> changeColor(color = ColorLed.YELLOW)
+                        "khách" -> changeColor(color = ColorLed.RED)
+                        "ăn" -> changeColor(color = ColorLed.GREEN)
+                        "bếp" -> changeColor(color = ColorLed.GREEN)
+                        "tắm" -> changeColor(color = ColorLed.BLUE)
                         "nothing" -> Log.d(TAG, "nothing")
                     }
                 } else {
                     Log.d(TAG, "Chưa nghe thấy")
                 }
-
             }
 
             override fun onReadyForSpeech() {
             }
 
         })
+    }
+
+    fun stopListening() {
+        Log.d(TAG, "stopListening")
+        _uiSate.update { it.copy(isListening = false) }
+        speechToTextManager.onStopListening()
+    }
+    private fun changeColor(color: ColorLed) {
+        _uiSate.update { it.copy(colorChange = color) }
     }
 
     private fun getStateLight() {
@@ -156,7 +178,14 @@ class MainViewModel @Inject constructor(
                         lightRepository.insertLight(
                             LightEntity(
                                 timestamp = getTimeStamp(),
-                                light = it.value.toString().toFloat()
+                                light = it.value.toString().toFloat(),
+                                type = when(uiState.value.colorChange) {
+                                    ColorLed.YELLOW -> "Đèn phòng ngủ"
+                                    ColorLed.RED -> "Đèn phòng khách"
+                                    ColorLed.GREEN -> "Đèn phòng bếp"
+                                    ColorLed.BLUE -> "Đèn nhà tắm"
+                                    else -> "Đèn phòng ngủ"
+                                }
                             )
                         )
                     }
@@ -197,6 +226,15 @@ class MainViewModel @Inject constructor(
                     uiState.copy(isLoading = false)
                 }
                 Log.d(TAG, "update light: success")
+                viewModelScope.launch {
+                    actionRepository.insertHistory(
+                        ActionEntity(
+                            timestamp = getTimeStamp(),
+                            action = lightAction,
+                            state = ActionState.SUCCESS.name
+                        )
+                    )
+                }
             }
             .addOnFailureListener {
                 Log.d(TAG, "update light: fail")
@@ -207,6 +245,16 @@ class MainViewModel @Inject constructor(
                         error = it.message.toString()
                     )
                 }
+                viewModelScope.launch {
+                    actionRepository.insertHistory(
+                        ActionEntity(
+                            timestamp = getTimeStamp(),
+                            action = lightAction,
+                            state = ActionState.FAIL.name
+                        )
+                    )
+                }
+
             }
     }
 
@@ -235,6 +283,7 @@ class MainViewModel @Inject constructor(
 
 
     data class UiSate(
+        val colorChange: ColorLed = ColorLed.YELLOW,
         val light: Float = 0.0F,
         val isLightOn: Boolean = false,
         val isAutoMode: Boolean = false,
@@ -243,4 +292,8 @@ class MainViewModel @Inject constructor(
         val isLoading: Boolean = false,
         val isListening: Boolean = false,
     )
+}
+
+interface LightColorHandle {
+    data class onColorChanged(val color: Color)
 }

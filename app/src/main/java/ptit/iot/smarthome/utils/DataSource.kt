@@ -10,6 +10,11 @@ object DataSource {
         ColorLed.BLUE,
         ColorLed.GREEN,
     )
+
+    val typeAction: List<String> = listOf(
+        "Thủ công",
+        "Tự động"
+    )
 }
 
 enum class Action(val title: Int) {
