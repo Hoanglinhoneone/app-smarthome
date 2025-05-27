@@ -15,6 +15,12 @@ Dự án **Smart Home** cho phép người dùng điều khiển hệ thống đ
 - **Speech to Text**: Giọng nói để điều khiển đèn
 - **Custom View**: Canvas (để tạo giao diện biểu đồ thống kê tùy chỉnh)
 - **Dependency Injection**: Hilt
+## Tổng quan luồng hoạt động hệ thống:
+![image](https://github.com/user-attachments/assets/c132fbd8-2893-45b4-a580-21b20371e1ff)
+
+## Giao diện :
+![image](https://github.com/user-attachments/assets/bfde55a4-f015-496c-95c2-d64aaff4fa0a)
+
 
 ## Chức Năng Ứng Dụng:
 ### Trang chủ: 
